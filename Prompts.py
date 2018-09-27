@@ -2,13 +2,13 @@
 """
 Created on Sun Sep 16 18:41:26 2018
 
-@author: lucas
+@author: Lucas Fonseca Lage
 """
 import os
 
 lista_prompts = []
 
-for dirpath, dirnames, filenames in os.walk(os.getcwd() + "\Dados ASAP\Essay_Set_Descriptions\Essay_prompts"):
+for dirpath, dirnames, filenames in os.walk(os.getcwd() + "\Essay_prompts"):
     for filename in filenames:
             file = open(os.path.normpath(os.path.join(dirpath,filename)), 'r') 
             lista_prompts.append(file.read())
