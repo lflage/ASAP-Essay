@@ -4,7 +4,7 @@ Created on Sat Sep 15 15:54:26 2018
 
 @author: lucas
 """
-import pandas as pd
+
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 import scipy
@@ -34,6 +34,10 @@ class ASAP_essay():
         self.flesch_score = 0
         self.nb_of_discourse_markers = 0
         self.nb_of_diff_words = 0
+        self.grammar_errors_p_token = 0
+        self.spell_errors_p_token = 0
+        self.discourse_markers_p_sentence = 0
+        self.style_errors = 0
         
         to_tokenize = eC.expandContractions(self.essay.lower())
         to_tokenize = re.sub(' +', ' ',to_tokenize)
@@ -111,7 +115,8 @@ class ASAP_essay():
     
     def get_nb_of_grammar_errors(self):
         url = 'https://languagetool.org/api/v2/check'
-        r = requests.post(url, data = {'text':self.essay, 'language': 'en',
+        r = requests.post(url, data = {'text':self.essay,
+                                       'language': 'en',
                                        'disabledRules':'EN_QUOTES,WHITESPACE_RULE,COMMA_PARENTHESIS_WHITESPACE,SENTENCE_WHITESPACE' } )
         print('Status code:',r.status_code)
         response_dict = r.json()
@@ -138,19 +143,25 @@ class ASAP_essay():
         self.nb_of_discourse_markers = counter
         return self.nb_of_discourse_markers
     
-valid_set = pd.read_csv("../IC/Dados ASAP/valid_set.tsv", sep = '\t+', engine = 'python')
-
-
-X = ASAP_essay(valid_set['essay'][1201],1)
-print(X.get_nb_of_tokens())
-X.get_mean_char_p_word()
-print(X.mean_char_p_word)
-X.get_nb_of_diff_words()
-print(X.nb_of_diff_words)
-X.get_nb_of_optimal_sentences()
-print(X.nb_of_optimal_sentences)
-print(X.get_nb_of_speliing_errors())
-print(X.get_flesch_score())
-print(X.get_cos_dist())
-print(X.get_nb_of_grammar_errors())
-print(X.get_nb_of_discourse_markers())
+    
+    def get_grammar_errors_p_token_n(self):
+        self.grammar_errors_p_token = self.nb_of_grammar_errors/self.nb_of_tokens
+        return self.grammar_errors_p_token
+    
+    def get_n_spell_errors_p_token_n(self):
+        self.spell_errors_p_token = self.nb_of_spell_errors/self.nb_of_tokens
+        return self.spell_errors_p_token
+    
+    def get_n_discourse_markers_p_sentence(self):
+        sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')					
+        n_of_sentences = len(sent_detector.tokenize(self.essay))
+        self.discourse_markers_p_sentence = self.nb_of_discourse_markers/n_of_sentences
+        return self.discourse_markers_p_sentence
+    
+    def get_style_errors(self):
+         url = 'https://languagetool.org/api/v2/check'
+         r = requests.post(url, data = {'text':self.essay, 'language': 'en','enabledCategories':'STYLE'} )
+         print('Status code:',r.status_code)
+         response_dict = r.json()
+         self.style_errors = len(response_dict['matches'])
+         return self.style_errors
