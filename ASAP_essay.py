@@ -4,7 +4,7 @@ Created on Sat Sep 15 15:54:26 2018
 
 @author: lucas
 """
-
+from py4j.java_gateway import JavaGateway
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 import scipy
@@ -15,7 +15,9 @@ import expandContractions as eC
 from textstat.textstat import textstat
 import discourseMarkers
 import Prompts
-import requests
+# =============================================================================
+# import requests
+# =============================================================================
 
 
 
@@ -23,6 +25,8 @@ class ASAP_essay():
     """classe para extração de features em uma redação do database ASAP"""
     
     def __init__(self,essay,prompt_number):     # entra com o essay e o essay_set do DataFrame
+
+        
         self.essay = essay
         self.prompt_number = prompt_number
         self.nb_of_tokens = 0
@@ -43,6 +47,13 @@ class ASAP_essay():
         to_tokenize = re.sub(' +', ' ',to_tokenize)
         self.vector = CountVectorizer()
         self.tokenized_essay = self.vector.fit_transform([to_tokenize])
+        
+        """Inicializa o LanguageTool para recolher erros"""
+        self.gg = JavaGateway.launch_gateway(classpath="./Java/errorslanguagetool.jar;./Java/LanguageTool-4.3;./Java/py4j0.10.8.1.jar;./Java/LanguageTool-4.3/languagetool.jar")
+        self.extract = self.gg.jvm.languagetoolEnglish.ExtractErrors()
+        self.errors = self.extract.getErrors()
+        self.errors.process(self.essay)
+        
         
     def get_nb_of_tokens(self):
         self.nb_of_tokens = self.tokenized_essay.toarray().sum()						# Soma todas as frequências de tokens dadas pelo CountVectorizer()
@@ -113,16 +124,22 @@ class ASAP_essay():
         self.cosine_distance = scipy.spatial.distance.cosine(z[0], z[1])
         return self.cosine_distance
     
-    def get_nb_of_grammar_errors(self):
-        url = 'https://languagetool.org/api/v2/check'
-        r = requests.post(url, data = {'text':self.essay,
-                                       'language': 'en',
-                                       'disabledRules':'EN_QUOTES,WHITESPACE_RULE,COMMA_PARENTHESIS_WHITESPACE,SENTENCE_WHITESPACE' } )
-        print('Status code:',r.status_code)
-        response_dict = r.json()
-        self.nb_of_grammar_errors = (len(response_dict['matches']))
-        return self.nb_of_grammar_errors
+# =============================================================================
+#     def get_nb_of_grammar_errors(self):
+#         url = 'https://languagetool.org/api/v2/check'
+#         r = requests.post(url, data = {'text':self.essay,
+#                                        'language': 'en',
+#                                        'disabledRules':'EN_QUOTES,WHITESPACE_RULE,COMMA_PARENTHESIS_WHITESPACE,SENTENCE_WHITESPACE' } )
+#         print('Status code:',r.status_code)
+#         response_dict = r.json()
+#         self.nb_of_grammar_errors = (len(response_dict['matches']))
+#         return self.nb_of_grammar_errors
+# =============================================================================
     
+        
+    def get_nb_of_grammar_errors_LT(self):
+        self.nb_of_grammar_errors = self.errors.getOthersErrors()
+        return self.nb_of_grammar_errors
         
     def get_nb_of_discourse_markers(self):
         counter=0
@@ -158,10 +175,21 @@ class ASAP_essay():
         self.discourse_markers_p_sentence = self.nb_of_discourse_markers/n_of_sentences
         return self.discourse_markers_p_sentence
     
-    def get_style_errors(self):
-         url = 'https://languagetool.org/api/v2/check'
-         r = requests.post(url, data = {'text':self.essay, 'language': 'en','enabledCategories':'STYLE'} )
-         print('Status code:',r.status_code)
-         response_dict = r.json()
-         self.style_errors = len(response_dict['matches'])
-         return self.style_errors
+    def get_style_errors_LT(self):
+        return self.errors.getStyleErrors()
+    
+# =============================================================================
+#     def get_style_errors(self):
+#          url = 'https://languagetool.org/api/v2/check'
+#          r = requests.post(url, data = {'text':self.essay,
+#                                    'language': 'en',
+#                                    'enabledCategories':'STYLE',
+#                                    'disabledRules':'EN_QUOTES,WHITESPACE_RULE,COMMA_PARENTHESIS_WHITESPACE,SENTENCE_WHITESPACE',
+#                                    })
+#          print('Status code:',r.status_code)
+#          response_dict = r.json()
+#          self.style_errors = len(response_dict['matches'])
+#          return self.style_errors
+# =============================================================================
+
+        
