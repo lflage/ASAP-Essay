@@ -1,0 +1,38 @@
+# A POS tag dictionary that's used as an addition (or as a fix) to catalan.dict
+# These words are candidates to be added (or fixed) in catalan.dict in the future
+# File Encoding: UTF-8
+# Format: fullform baseform postags (tab separated)
+########## Dictionary fixes ##########
+########## Additions ##########
+col·laborativament	col·laborativament	RG
+confraternitzador	confraternitzador	AQ0MS0
+confraternitzadora	confraternitzador	AQ0FS0
+confraternitzadores	confraternitzador	AQ0FP0
+confraternitzadors	confraternitzador	AQ0MP0
+degustador	degustador	AQ0MS0
+degustadora	degustador	AQ0FS0
+degustadores	degustador	AQ0FP0
+degustadors	degustador	AQ0MP0
+estaliniana	estalinià	AQ0FS0
+estalinianes	estalinià	AQ0FP0
+estalinians	estalinià	AQ0MP0
+estalinià	estalinià	AQ0MS0
+macroprudencial	macroprudencial	AQ0CS0
+macroprudencials	macroprudencial	AQ0CP0
+macroregional	macroregional	AQ0CS0
+macroregionals	macroregional	AQ0CP0
+mediambientalista	mediambientalista	AQ0CS0
+mediambientalistes	mediambientalista	AQ0CP0
+paneslau	paneslau	AQ0MS0
+paneslaus	paneslau	AQ0MP0
+paneslava	paneslau	AQ0FS0
+paneslaves	paneslau	AQ0FP0
+portàtil	portàtil	NCMS000
+portàtils	portàtil	NCMP000
+postconflicte	postconflicte	AQ0CN0
+preparlamentari	preparlamentari	AQ0MS0
+preparlamentaris	preparlamentari	AQ0MP0
+preparlamentària	preparlamentari	AQ0FS0
+preparlamentàries	preparlamentari	AQ0FP0
+reproductivitat	reproductivitat	NCFS000
+reproductivitats	reproductivitat	NCFP000

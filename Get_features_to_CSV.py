@@ -13,14 +13,15 @@ from textstat.textstat import textstat
 from py4j.java_gateway import JavaGateway
 
 # Primeiramente iniciamos a conexão com java para extração de erros gramaticais com o Language Tool
-gg = JavaGateway.launch_gateway(classpath="./Java/errorslanguagetool.jar;./Java/LanguageTool-4.3;./Java/py4j0.10.8.1.jar;./Java/LanguageTool-4.3/languagetool.jar")
+gg = JavaGateway.launch_gateway(classpath="./LanguageTool/errorslanguagetool.jar;./LanguageTool/LanguageTool-4.3;./LanguageTool/py4j0.10.8.1.jar;./LanguageTool/LanguageTool-4.3/languagetool.jar")
 
 
 
 # Leitura do dataset ASAP 
-valid_set = pd.read_csv("./Dados ASAP/training_set_rel3.tsv", sep = '\t+', engine = 'python')
+valid_set = pd.read_csv("./joint_asap_essays_with_normalization.csv", engine = 'python')
 
 feature_df = pd.DataFrame()
+
 
 for index, row in valid_set.iterrows():
     """Colocando o id de cada essay no dataframe"""
@@ -62,5 +63,16 @@ for index, row in valid_set.iterrows():
     feature_df.loc[index,'discourse_markers'] = discourse_marker_tp[0]              #F12
     feature_df.loc[index,'discourse_markers_p_sentence'] = discourse_marker_tp[1]   #F13
     
+    """Features de pronomes de primeira pessoa"""
+    fp_pronoun = asap.nb_first_person_pronoun(Y)
+    feature_df.loc[index,'nb_first_person_pronouns'] = fp_pronoun[0]				#F14
+    feature_df.loc[index,'nb_first_person_pronouns_p_sentence'] = fp_pronoun[1]		#F15
+    
+    """ Features de pronomes demonstrativos"""
+    
+    feature_df.loc[index,'nb_demonstrative_pronouns'] = asap.nb_demonstrative_pronoun(Y)																#F16
+    feature_df.loc[index,'nb_demonstrative_pronouns_p_token'] = feature_df['nb_demonstrative_pronouns'][index]/feature_df['nb_of_tokens'][index]		#17
+    
     print(index)
-feature_df.to_csv('./ASAP_feature_table.csv', index = False)
+    
+feature_df.to_csv('./joint_asap_essays_with_normalization_feature_table.csv', index = False)

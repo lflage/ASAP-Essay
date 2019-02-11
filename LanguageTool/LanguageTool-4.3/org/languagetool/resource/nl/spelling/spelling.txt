@@ -1,0 +1,41 @@
+# Words that extend the spell checker. See ignore.txt for words that should be
+# completely ignored (i.e. not used to create suggestions).
+# LET OP! De bedoeling is alleen woorden op te nemen die voldoen aan de regels van de Taalunie.
+# liefst controleren aan de hand van de technische handleiding spelling, of woordenlijst.org.
+# Neem geen zeldzame woorden op die ook gemakkelijk een fout kunnen zijn van een veel voorkomend woord.
+# Eigennamen zijn woorden die buiten de normen van de eisen van de Taalunie vallen. 
+# In geval van aardrijkskundige namen is wel de lijst van de Taalunie van toepassing.
+# In geval van eigennamen controleren hoe de firma de naam zelf schrijft (donorprincipe), niet uitgaan van het beeldmerk (tekst op logo).
+# Geen woordgroepen of afkortingen opnemen, anders met een # ervoor; die moeten anders worden verwerkt!
+#
+#Beter dan dit alles is het doorgeven van een gemist woord aan languagetool@taaltik.nl
+#
+#CRM
+# d'r
+#too short for WordListValidatorTest,java. Will affect other languages.
+Duitsland
+menieden
+meniënd
+meniënde
+meniënden
+gegorden
+gor
+gorde
+gorre
+gorren
+gorrend
+gorrende
+gorrenden
+poortvrij
+matcha
+onbekrast
+onbekraste
+eutrofe
+eutroof
+ECB
+Nederlander
+Nederlanders
+PVV
+SER
+puriste
+puristes

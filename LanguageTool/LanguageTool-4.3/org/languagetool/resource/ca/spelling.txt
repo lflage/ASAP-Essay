@@ -1,0 +1,34 @@
+# Words that extend the spell checker. See ignore.txt for words that should be
+# completely ignored (i.e. not used to create suggestions).
+col·laborativament
+confraternitzador
+confraternitzadora
+confraternitzadores
+confraternitzadors
+degustador
+degustadora
+degustadores
+degustadors
+estaliniana
+estalinianes
+estalinians
+estalinià
+macroprudencial
+macroprudencials
+macroregional
+macroregionals
+mediambientalista
+mediambientalistes
+paneslau
+paneslaus
+paneslava
+paneslaves
+portàtil
+portàtils
+postconflicte
+preparlamentari
+preparlamentaris
+preparlamentària
+preparlamentàries
+reproductivitat
+reproductivitats

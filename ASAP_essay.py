@@ -14,6 +14,9 @@ from textblob import Word
 import expandContractions as eC
 import discourseMarkers
 import Prompts
+import spacy
+
+
 
 
 def pre_process(essay):
@@ -84,7 +87,7 @@ def discourse_markers_features(essay):
     """Feature 6: Numero de marcadores de discurso na redação"""
     
     counter=0
-    for discourse_marker in discourseMarkers.multi_word_expression():
+    for discourse_marker in discourseMarkers.multi_word_exp():
         result = None
         result = discourse_marker.findall(essay)
         re.sub(discourse_marker,'',essay)
@@ -120,4 +123,44 @@ def nb_optimal_sentence(essay):
         nb_of_optimal_sentences = counter
     return nb_of_optimal_sentences
 
+def nb_first_person_pronoun(essay):
+    
+    sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+    sentence_nb = len(sent_detector.tokenize(essay))
+    
+    fp_prn_nb = 0
+    f = open("./first_person_pronouns.txt", 'r', encoding = 'utf8')
+    dict_prn = dict.fromkeys(f.read().lower().split(),None)
 
+    norm_e = re.sub("[^a-z]",' ',essay,flags = re.IGNORECASE)
+    for i in norm_e.lower().strip().split():
+        if i in dict_prn:
+            fp_prn_nb += 1
+    
+    return (fp_prn_nb, fp_prn_nb/sentence_nb)
+
+def nb_demonstrative_pronoun(essay):
+    
+    demon_prn_nb = 0
+    f = open("./demonstrative_pronouns.txt", 'r', encoding = 'utf8')
+    dict_prn = dict.fromkeys(f.read().lower().split(),None)
+    
+    nlp = spacy.load('en_core_web_sm')
+    doc = nlp(essay)
+    
+    for token in doc:
+        if token.text in dict_prn and token.pos_ == 'DET':
+            demon_prn_nb += 1
+    
+    return (demon_prn_nb)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
